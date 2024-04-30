@@ -12,6 +12,7 @@ parser = argparse.ArgumentParser(description='Convert CSV to YAML')
 parser.add_argument('--ru', action='store_true', help='Generate Russian translations')
 parser.add_argument('--zh', action='store_true', help='Generate Chinese (Simplified) translations')
 parser.add_argument('--ko', action='store_true', help='Generate Koear translations')
+parser.add_argument('--es', action='store_true', help='Generate es translations')
 args = parser.parse_args()
 compile_command = 'lv_i18n compile -t "*.yml" -o .'
 
@@ -21,6 +22,7 @@ with open("./data.csv", newline="", encoding='utf-8') as csvfile:
     ru = {}
     cn = {}
     ko = {}
+    es = {}
 
     for row in reader:
         id = row['ID']
@@ -31,6 +33,8 @@ with open("./data.csv", newline="", encoding='utf-8') as csvfile:
             cn[id] = row['cn']
         if args.ko:
             ko[id] = row['ko']
+        if args.es:
+            es[id] = row['es']
 
 with open("./en.yml", 'w', encoding='utf-8') as f:
     yaml.dump({'en': en}, f, default_flow_style=False)
@@ -49,6 +53,11 @@ if args.ko:
     with open("./ko.yml", 'w', encoding='utf-8') as f:
         yaml.dump({'ko': ko}, f, allow_unicode=True, default_flow_style=False)
     compile_command += ' -l ko'
+
+if args.es:
+    with open("./es.yml", 'w', encoding='utf-8') as f:
+        yaml.dump({'es': es}, f, allow_unicode=True, default_flow_style=False)
+    compile_command += ' -l es'
 
 compile_command += ' -l en'
 

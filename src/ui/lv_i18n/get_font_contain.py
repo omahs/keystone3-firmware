@@ -18,15 +18,16 @@ def main():
     parser.add_argument('--ru', action='store_true', help='Generate Russian translations')
     parser.add_argument('--cn', action='store_true', help='Generate Chinese (Simplified) translations')
     parser.add_argument('--ko', action='store_true', help='Generate Korean translations')
+    parser.add_argument('--es', action='store_true', help='Generate spanish translations')
     args = parser.parse_args()
 
-    language = 'cn'
-    if args.ru:
-        language = 'ru'
-    elif args.cn:
-        language = 'cn'
-    elif args.ko:
-        language = 'ko'
+    language_options = {
+        'ru': args.ru,
+        'cn': args.cn,
+        'ko': args.ko,
+        'es': args.es
+    }
+    language = next((lang for lang, selected in language_options.items() if selected), 'cn')
 
     df = pd.read_csv('data.csv')
 
